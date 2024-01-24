@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "809230841111",
+    "project_id": "ceal-placement-notifier",
+    "storage_bucket": "ceal-placement-notifier.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:809230841111:android:3b919eafccb642464a7352",
+        "android_client_info": {
+          "package_name": "com.example.ceal_placement_notifier"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "809230841111-q93un576utf46utvf9ed0fovq5jqgpf5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBS0jQjSu8snyhyPGfDvggW7b1OFTgyHWw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "809230841111-q93un576utf46utvf9ed0fovq5jqgpf5.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "809230841111-8hsqn2verk8gvsl4p8799bco90qdhi40.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.cealPlacementNotifier"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
