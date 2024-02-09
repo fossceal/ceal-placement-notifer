@@ -25,6 +25,7 @@ void main() async {
   auth.listenToAuthChanges();
   await PushNotifications.init();
   PushNotifications.localNotiInit();
+  await FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundMessage);
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     String payloadData = jsonEncode(message.data);

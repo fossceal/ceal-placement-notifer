@@ -18,6 +18,7 @@ class PushNotifications {
     );
     final token = await _firebaseMessaging.getToken();
     print("device token $token");
+    await _firebaseMessaging.subscribeToTopic("placement");
   }
 
   static Future localNotiInit() async {

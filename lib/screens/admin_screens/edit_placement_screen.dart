@@ -3,26 +3,37 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:placement_notifier/controllers/database_controller.dart';
-import 'package:placement_notifier/models/placement.dart';
 
-class AdminAddPlacementScreen extends StatefulWidget {
-  const AdminAddPlacementScreen({super.key});
+class EditPlacementScreen extends StatefulWidget {
+  const EditPlacementScreen(
+      {super.key,
+      required this.id,
+      required this.companyName,
+      required this.jobRole,
+      required this.jobDescription,
+      required this.applyLink,
+      this.logo});
 
-  // final bool fromData;
+  final String id;
+  final String companyName;
+  final String jobRole;
+  final String jobDescription;
+  final String applyLink;
+  final String? logo;
 
   @override
-  State<AdminAddPlacementScreen> createState() =>
-      _AdminAddPlacementScreenState();
+  State<EditPlacementScreen> createState() => _EditPlacementScreenState();
 }
 
-class _AdminAddPlacementScreenState extends State<AdminAddPlacementScreen> {
+class _EditPlacementScreenState extends State<EditPlacementScreen> {
   late TextEditingController _companyNameController;
   late TextEditingController _jobRoleController;
   late TextEditingController _jobDescriptionController;
   late TextEditingController _applyLinkController;
 
-  bool isLogoPicked = false;
-  late File pickedImage;
+  late bool isLogoPicked = widget.logo != null;
+  late String logoUrl = widget.logo ?? "";
+  File? logoFile;
 
   @override
   void initState() {
@@ -30,6 +41,12 @@ class _AdminAddPlacementScreenState extends State<AdminAddPlacementScreen> {
     _jobRoleController = TextEditingController();
     _jobDescriptionController = TextEditingController();
     _applyLinkController = TextEditingController();
+    _companyNameController.value = TextEditingValue(text: widget.companyName);
+    _jobRoleController.value = TextEditingValue(text: widget.jobRole);
+    _jobDescriptionController.value =
+        TextEditingValue(text: widget.jobDescription);
+    _applyLinkController.value = TextEditingValue(text: widget.applyLink);
+    logoUrl = widget.logo!;
     super.initState();
   }
 
@@ -54,7 +71,7 @@ class _AdminAddPlacementScreenState extends State<AdminAddPlacementScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "Add a placement notification",
+                "Edit the placement notification",
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
@@ -81,7 +98,10 @@ class _AdminAddPlacementScreenState extends State<AdminAddPlacementScreen> {
                       ? SizedBox(
                           height: 100,
                           width: 100,
-                          child: Image.file(pickedImage))
+                          child: logoFile == null
+                              ? Image.network(logoUrl)
+                              : Image.file(logoFile!),
+                        )
                       : const Text("Pick Logo of the Company"),
                   const SizedBox(
                     width: 20,
@@ -104,9 +124,10 @@ class _AdminAddPlacementScreenState extends State<AdminAddPlacementScreen> {
                             if (result != null) {
                               File file = File(result.files.single.path!);
                               setState(() {
-                                pickedImage = file;
                                 isLogoPicked = true;
+                                logoFile = file;
                               });
+                              // storage.uploadLogo();
                             } else {
                               // User canceled the picker
                             }
@@ -155,27 +176,25 @@ class _AdminAddPlacementScreenState extends State<AdminAddPlacementScreen> {
                 height: 55,
                 child: ElevatedButton.icon(
                   onPressed: () async {
-                    await db
-                        .addNotification(
-                          Placement(
-                              id: "",
-                              companyName: _companyNameController.text,
-                              jobRole: _jobRoleController.text,
-                              jobDescription: _jobDescriptionController.text,
-                              applyLink: _applyLinkController.text,
-                              imageUrl: ""),
-                          pickedImage,
-                        )
-                        .then(
-                          (_) => ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Notification sent successfully"),
-                            ),
-                          ),
-                        );
+                    db
+                        .updateNotification(
+                      id: widget.id,
+                      companyName: _companyNameController.text,
+                      jobRole: _jobRoleController.text,
+                      jobDescription: _jobDescriptionController.text,
+                      link: _applyLinkController.text,
+                      imageFile: logoFile,
+                    )
+                        .then((_) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("Notification edited successfully"),
+                        ),
+                      );
+                    });
                   },
                   icon: const Icon(Icons.send),
-                  label: const Text("Send Push Notification"),
+                  label: const Text("Edit Placement Notification"),
                 ),
               ),
             ],
