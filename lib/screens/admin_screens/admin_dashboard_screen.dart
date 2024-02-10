@@ -12,7 +12,6 @@ class AdminDashboardScreen extends StatefulWidget {
 }
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
-  // void init() {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -56,7 +55,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                       setState(() {});
                     },
                   ),
-                  leading: Image.network(notification.imageUrl),
+                  leading: CircleAvatar(
+                    radius: 30,
+                    backgroundImage: NetworkImage(notification.imageUrl),
+                  ),
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(

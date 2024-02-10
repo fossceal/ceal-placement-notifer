@@ -3,12 +3,9 @@ import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:placement_notifier/configs/push_notifications_config.dart';
 import 'package:placement_notifier/controllers/authentication_controller.dart';
 import 'package:placement_notifier/firebase_options.dart';
-import 'package:placement_notifier/router.dart';
-import 'package:placement_notifier/screens/admin_screens/admin_dashboard_screen.dart';
 import 'package:placement_notifier/screens/admin_screens/admin_home_screen.dart';
 import 'package:placement_notifier/screens/authentication_screens/sign_in_screen.dart';
 import 'package:placement_notifier/screens/student_screens/student_home_screen.dart';
@@ -52,14 +49,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
         brightness: Brightness.light,
         useMaterial3: true,
       ),
-      routerConfig: appRouter,
+      home: const InitialiserScreen(),
     );
   }
 }
@@ -72,10 +69,8 @@ class InitialiserScreen extends StatelessWidget {
     return Watch((context) {
       if (auth.isLoggedIn.value) {
         if (auth.currentlyLoggedInUser.value!.email ==
-            "anumarvelz57@gmail.com") {
-          return const AdminHomeScreen(
-            child: AdminDashboardScreen(),
-          );
+            "anumarvelz527@gmail.com") {
+          return const AdminHomeScreen();
         } else {
           return const StudentHomeScreen();
         }

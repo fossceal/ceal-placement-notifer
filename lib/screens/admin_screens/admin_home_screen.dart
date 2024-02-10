@@ -1,16 +1,14 @@
-
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:placement_notifier/controllers/authentication_controller.dart';
-import 'package:placement_notifier/router.dart';
+import 'package:placement_notifier/screens/admin_screens/admin_add_placement_screen.dart';
+import 'package:placement_notifier/screens/admin_screens/admin_dashboard_screen.dart';
 
 class AdminHomeScreen extends StatelessWidget {
-  const AdminHomeScreen({super.key, required this.child});
-
-  final Widget child;
+  const AdminHomeScreen({super.key});
 
   void logout(BuildContext context) {
     //show alert dialog
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -28,18 +26,18 @@ class AdminHomeScreen extends StatelessWidget {
               child: const Text('Continue'),
               onPressed: () async {
                 await auth.signOut().then((value) {
-                  context.pop();
+                  Navigator.of(context).pop();
                 }).catchError((err) {
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: err));
-                  context.pop();
+                  Navigator.of(context).pop();
                 });
               },
             ),
             TextButton(
               child: const Text('Cancel'),
               onPressed: () {
-                context.pop();
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -48,32 +46,11 @@ class AdminHomeScreen extends StatelessWidget {
     );
   }
 
-  static int _calculateSelectedIndex(BuildContext context) {
-    final String location = GoRouterState.of(context).uri.toString();
-    if (location.startsWith('/admin-dashboard')) {
-      return 0;
-    }
-    if (location.startsWith('/admin-add-placement')) {
-      return 1;
-    }
-    return 0;
-  }
-
-  void _onItemTapped(int index, BuildContext context) {
-    switch (index) {
-      case 0:
-        GoRouter.of(context).pushReplacement(AppRouteConstants.adminDashboard);
-      case 1:
-        GoRouter.of(context)
-            .pushReplacement(AppRouteConstants.adminAddPlacement);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Ceal Placement Notifier Admin Panel"),
+        title: const Text("Placement Notifier Admin Panel"),
         actions: [
           IconButton(
             onPressed: () {
@@ -83,20 +60,14 @@ class AdminHomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: child,
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Dashboard',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'Add Placement',
-          ),
-        ],
-        currentIndex: _calculateSelectedIndex(context),
-        onTap: (int idx) => _onItemTapped(idx, context),
+      body: const AdminDashboardScreen(),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return const AdminAddPlacementScreen();
+          }));
+        },
       ),
     );
   }

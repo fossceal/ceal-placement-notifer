@@ -7,6 +7,7 @@ import 'package:placement_notifier/controllers/storage_controller.dart';
 import 'package:placement_notifier/models/placement.dart';
 import 'package:uuid/uuid.dart';
 
+
 class DatabaseController {
   final db = FirebaseFirestore.instance;
 
@@ -30,6 +31,7 @@ class DatabaseController {
         );
 
     var url = Uri.http('10.0.2.2:5270', 'sendNotification');
+
     var body = {
       'company_name': placement.companyName,
       'job_role': placement.jobRole,

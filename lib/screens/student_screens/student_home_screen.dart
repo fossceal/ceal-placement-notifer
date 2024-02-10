@@ -119,7 +119,10 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                     child: ListTile(
                       title: Text(notification.companyName),
                       subtitle: Text(notification.jobRole),
-                      leading: Image.network(notification.imageUrl),
+                      leading: CircleAvatar(
+                        radius: 30,
+                        backgroundImage: NetworkImage(notification.imageUrl),
+                      ),
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
