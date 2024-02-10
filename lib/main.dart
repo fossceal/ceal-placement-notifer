@@ -68,7 +68,7 @@ class InitialiserScreen extends StatelessWidget {
     return Watch((context) {
       if (auth.isLoggedIn.value) {
         if (auth.currentlyLoggedInUser.value!.email ==
-            "anumarvelz527@gmail.com") {
+            "anumarvelz52@gmail.com") {
           return const AdminHomeScreen(
             child: AdminDashboardScreen(),
           );

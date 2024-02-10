@@ -1,6 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:placement_notifier/controllers/authentication_controller.dart';
+import 'package:placement_notifier/controllers/database_controller.dart';
+import 'package:placement_notifier/models/placement.dart';
+import 'package:placement_notifier/screens/student_screens/placement_details_screen.dart';
 
 class StudentHomeScreen extends StatefulWidget {
   const StudentHomeScreen({super.key});
@@ -81,7 +84,51 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
           ),
         ],
       ),
-      body: const Placeholder(),
+      body: FutureBuilder(
+        future: db.getPaginatedNotifications(10),
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          if (snapshot.hasError) {
+            print(snapshot.stackTrace);
+            return Center(
+              child: Text("Error fetching notifications ${snapshot.error}"),
+            );
+          }
+          final notifications = snapshot.data as List<Placement>;
+          if (notifications.isEmpty) {
+            return const Center(
+              child: Text("No notifications found"),
+            );
+          } else {
+            return ListView.builder(
+              itemCount: notifications.length,
+              itemBuilder: (_, index) {
+                final notification = notifications[index];
+                print(notification);
+                return ListTile(
+                  title: Text(notification.companyName),
+                  subtitle: Text(notification.jobRole),
+                  leading: Image.network(notification.imageUrl),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return PlacementDetailsScreen(
+                              placement: notification);
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+            );
+          }
+        },
+      ),
     );
   }
 }
