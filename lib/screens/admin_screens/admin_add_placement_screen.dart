@@ -157,22 +157,25 @@ class _AdminAddPlacementScreenState extends State<AdminAddPlacementScreen> {
                   onPressed: () async {
                     await db
                         .addNotification(
-                          Placement(
-                              id: "",
-                              companyName: _companyNameController.text,
-                              jobRole: _jobRoleController.text,
-                              jobDescription: _jobDescriptionController.text,
-                              applyLink: _applyLinkController.text,
-                              imageUrl: ""),
-                          pickedImage,
-                        )
+                      Placement(
+                          id: "",
+                          companyName: _companyNameController.text,
+                          jobRole: _jobRoleController.text,
+                          jobDescription: _jobDescriptionController.text,
+                          applyLink: _applyLinkController.text,
+                          imageUrl: ""),
+                      pickedImage,
+                    )
                         .then(
-                          (_) => ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Notification sent successfully"),
-                            ),
-                          ),
-                        );
+                      (_) async {
+                       
+
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                          content: Text("Notification sent successfully"),
+                        ));
+                      },
+                    );
                   },
                   icon: const Icon(Icons.send),
                   label: const Text("Send Push Notification"),

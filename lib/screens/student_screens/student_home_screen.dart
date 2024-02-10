@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:placement_notifier/controllers/authentication_controller.dart';
 import 'package:placement_notifier/controllers/database_controller.dart';
 import 'package:placement_notifier/models/placement.dart';
@@ -104,27 +105,35 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
               child: Text("No notifications found"),
             );
           } else {
-            return ListView.builder(
-              itemCount: notifications.length,
-              itemBuilder: (_, index) {
-                final notification = notifications[index];
-                print(notification);
-                return ListTile(
-                  title: Text(notification.companyName),
-                  subtitle: Text(notification.jobRole),
-                  leading: Image.network(notification.imageUrl),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return PlacementDetailsScreen(
-                              placement: notification);
-                        },
-                      ),
-                    );
-                  },
-                );
+            return LiquidPullToRefresh(
+              onRefresh: () {
+                setState(() {});
+                return Future.value();
               },
+              child: ListView.builder(
+                itemCount: notifications.length,
+                itemBuilder: (_, index) {
+                  final notification = notifications[index];
+                  print(notification);
+                  return SizedBox(
+                    child: ListTile(
+                      title: Text(notification.companyName),
+                      subtitle: Text(notification.jobRole),
+                      leading: Image.network(notification.imageUrl),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return PlacementDetailsScreen(
+                                  placement: notification);
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             );
           }
         },

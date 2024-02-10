@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:placement_notifier/configs/push_notifications_config.dart';
 import 'package:placement_notifier/controllers/authentication_controller.dart';
 import 'package:placement_notifier/firebase_options.dart';
@@ -37,6 +38,9 @@ void main() async {
       );
     }
   });
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  // ]);
   runApp(
     const MyApp(),
   );
@@ -68,7 +72,7 @@ class InitialiserScreen extends StatelessWidget {
     return Watch((context) {
       if (auth.isLoggedIn.value) {
         if (auth.currentlyLoggedInUser.value!.email ==
-            "anumarvelz52@gmail.com") {
+            "anumarvelz57@gmail.com") {
           return const AdminHomeScreen(
             child: AdminDashboardScreen(),
           );

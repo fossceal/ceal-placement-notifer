@@ -45,6 +45,9 @@ dependencies:
   firebase_storage: ^11.6.4
   file_picker: ^6.1.1
   uuid: ^4.3.3
+  url_launcher: ^6.2.4
+  http: ^1.2.0
+  liquid_pull_to_refresh: ^3.0.1
 
 dev_dependencies:
   flutter_test:
