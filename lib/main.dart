@@ -11,9 +11,7 @@ import 'package:placement_notifier/screens/authentication_screens/sign_in_screen
 import 'package:placement_notifier/screens/student_screens/student_home_screen.dart';
 import 'package:signals/signals_flutter.dart';
 
-Future _firebaseBackgroundMessage(RemoteMessage message) async {
-  print("notification received $message");
-}
+Future _firebaseBackgroundMessage(RemoteMessage message) async {}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,9 +33,6 @@ void main() async {
       );
     }
   });
-  // SystemChrome.setPreferredOrientations([
-  //   DeviceOrientation.portraitUp,
-  // ]);
   runApp(
     const MyApp(),
   );
@@ -69,7 +64,10 @@ class InitialiserScreen extends StatelessWidget {
     return Watch((context) {
       if (auth.isLoggedIn.value) {
         if (auth.currentlyLoggedInUser.value!.email ==
-            "anumarvelz527@gmail.com") {
+                "anumarvelz527@gmail.com" ||
+            auth.currentlyLoggedInUser.value!.email == "anug1035@gmail.com" ||
+            auth.currentlyLoggedInUser.value!.email ==
+                "shanu@ceattingal.ac.in") {
           return const AdminHomeScreen();
         } else {
           return const StudentHomeScreen();

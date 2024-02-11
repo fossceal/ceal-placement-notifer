@@ -7,49 +7,49 @@ import 'package:placement_notifier/controllers/storage_controller.dart';
 import 'package:placement_notifier/models/placement.dart';
 import 'package:uuid/uuid.dart';
 
-
 class DatabaseController {
   final db = FirebaseFirestore.instance;
 
   var uuid = const Uuid();
 
   Future addNotification(Placement placement, File imageFile) async {
-    final imageurl = await storage.uploadLogo(imageFile, uuid.v1());
+    try {
+      final imageurl = await storage.uploadLogo(imageFile, uuid.v1());
 
-    final notification = {
-      "company_name": placement.companyName,
-      "job_role": placement.jobRole,
-      "job_description": placement.jobDescription,
-      "link": placement.applyLink,
-      "logo": imageurl,
-    };
+      final notification = {
+        "company_name": placement.companyName,
+        "job_role": placement.jobRole,
+        "job_description": placement.jobDescription,
+        "link": placement.applyLink,
+        "logo": imageurl,
+      };
 
-    await db.collection("notifications").add(notification).then(
-          (DocumentReference doc) => print(
-            'DocumentSnapshot added with ID: ${doc.id}',
-          ),
-        );
+      await db.collection("notifications").add(notification).then(
+            (DocumentReference doc) => print(
+              'DocumentSnapshot added with ID: ${doc.id}',
+            ),
+          );
 
-    var url = Uri.http('10.0.2.2:5270', 'sendNotification');
+      var url = Uri.http('10.0.2.2:5270', 'sendNotification');
 
-    var body = {
-      'company_name': placement.companyName,
-      'job_role': placement.jobRole,
-      'job_description': placement.jobDescription,
-      'apply_link': placement.applyLink,
-      'company_logo': imageurl,
-    };
+      var body = {
+        'company_name': placement.companyName,
+        'job_role': placement.jobRole,
+        'job_description': placement.jobDescription,
+        'apply_link': placement.applyLink,
+        'company_logo': imageurl,
+      };
 
-    var response = await http.post(
-      url,
-      body: json.encode(body),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    );
-
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
+      var response = await http.post(
+        url,
+        body: json.encode(body),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      );
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<void> deleteNotification(String id, String fileurl) async {

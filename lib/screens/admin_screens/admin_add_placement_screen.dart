@@ -170,7 +170,11 @@ class _AdminAddPlacementScreenState extends State<AdminAddPlacementScreen> {
                             content: Text("Notification sent successfully"),
                           ));
                         },
-                      );
+                      ).catchError((err) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("Error: $err"),
+                        ));
+                      });
                     },
                     icon: const Icon(Icons.send),
                     label: const Text("Send Push Notification"),
