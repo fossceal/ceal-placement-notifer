@@ -194,6 +194,42 @@ class _EditPlacementScreenState extends State<EditPlacementScreen> {
                     label: const Text("Edit Placement Notification"),
                   ),
                 ),
+                const SizedBox(
+                  height: 30,
+                ),
+                //submit button
+                SizedBox(
+                  height: 55,
+                  child: ElevatedButton.icon(
+                    style: ButtonStyle(
+                      iconColor: MaterialStateProperty.all(
+                        const Color.fromARGB(
+                          255,
+                          177,
+                          52,
+                          43,
+                        ),
+                      ),
+                    ),
+                    onPressed: () async {
+                      db
+                          .deleteNotification(widget.id, widget.logo ?? "")
+                          .then((_) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Notification deleted successfully"),
+                          ),
+                        );
+                        Navigator.of(context).pop();
+                      });
+                    },
+                    icon: const Icon(Icons.delete),
+                    label: const Text(
+                      "Delete Placement Notification",
+                      style: TextStyle(color: Color.fromARGB(255, 177, 52, 43)),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

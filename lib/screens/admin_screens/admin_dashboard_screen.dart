@@ -23,7 +23,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
           );
         }
         if (snapshot.hasError) {
-          print(snapshot.stackTrace);
           return Center(
             child: Text("Error fetching notifications ${snapshot.error}"),
           );
@@ -43,7 +42,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               itemCount: notifications.length,
               itemBuilder: (_, index) {
                 final notification = notifications[index];
-                print(notification);
                 return ListTile(
                   title: Text(notification.companyName),
                   subtitle: Text(notification.jobRole),
@@ -73,7 +71,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           );
                         },
                       ),
-                    );
+                    ).then((value) {
+                      setState(() {});
+                    });
                   },
                 );
               },

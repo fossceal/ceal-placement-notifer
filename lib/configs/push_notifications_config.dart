@@ -16,8 +16,7 @@ class PushNotifications {
       provisional: false,
       sound: true,
     );
-    final token = await _firebaseMessaging.getToken();
-    print("device token $token");
+    await _firebaseMessaging.getToken();
     await _firebaseMessaging.subscribeToTopic("placement");
   }
 

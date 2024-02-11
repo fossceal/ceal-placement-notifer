@@ -11,10 +11,8 @@ class AuthenticationController {
   void listenToAuthChanges() {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
-        print('User is currently signed out!');
         currentlyLoggedInUser.value = null;
       } else {
-        print('User is signed in!');
         currentlyLoggedInUser.value = user;
       }
     });
@@ -25,7 +23,7 @@ class AuthenticationController {
       GoogleAuthProvider googleAuthProvider = GoogleAuthProvider();
       _auth.signInWithProvider(googleAuthProvider);
     } catch (err) {
-      print(err);
+      rethrow;
     }
   }
 

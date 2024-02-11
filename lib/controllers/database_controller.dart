@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,13 +25,7 @@ class DatabaseController {
         "logo": imageurl,
       };
 
-      await db.collection("notifications").add(notification).then(
-            (DocumentReference doc) => print(
-              'DocumentSnapshot added with ID: ${doc.id}',
-            ),
-          );
-
-      var url = Uri.http('10.0.2.2:5270', 'sendNotification');
+      var url = Uri.https(dotenv.env["SERVER_URL"]!, "sendNotification");
 
       var body = {
         'company_name': placement.companyName,
@@ -40,23 +35,23 @@ class DatabaseController {
         'company_logo': imageurl,
       };
 
-      var response = await http.post(
+      await http.post(
         url,
         body: json.encode(body),
         headers: {
           "Content-Type": "application/json",
         },
       );
-    } catch (e) {
+
+      await db.collection("notifications").add(notification);
+    } catch (err) {
       rethrow;
     }
   }
 
   Future<void> deleteNotification(String id, String fileurl) async {
     await storage.deleteLogo(fileurl);
-    await db.collection("notifications").doc(id).delete().then(
-          (value) => print('Notification deleted'),
-        );
+    await db.collection("notifications").doc(id).delete();
   }
 
   Future<void> updateNotification({
@@ -86,9 +81,7 @@ class DatabaseController {
       "logo": logo,
     };
 
-    await db.collection("notifications").doc(id).update(notification).then(
-          (value) => print('Notification updated'),
-        );
+    await db.collection("notifications").doc(id).update(notification);
   }
 
   Future getPaginatedNotifications(int limit) async {
@@ -103,6 +96,30 @@ class DatabaseController {
       }
     });
     return placements;
+  }
+
+  Future<List<dynamic>> getAllAdmins() async {
+    try {
+      var url = Uri.https(dotenv.env["SERVER_URL"]!, "get-admins");
+
+      var response = await http.get(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "api": dotenv.env["API_KEY"]!,
+        },
+      );
+
+      var data = json.decode(response.body);
+
+      if (data["success"] = true) {
+        return data["admins"];
+      } else {
+        return [];
+      }
+    } catch (err) {
+      rethrow;
+    }
   }
 }
 

@@ -14,7 +14,6 @@ class SignInScreen extends StatelessWidget {
         width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
               "Sign in With Institution Mail",
@@ -25,7 +24,19 @@ class SignInScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                auth.handleGoogleSignin();
+                auth.handleGoogleSignin().then((_) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Successfully Logged in"),
+                    ),
+                  );
+                }).catchError((err) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Error: $err"),
+                    ),
+                  );
+                });
               },
               child: const SizedBox(
                 // width: 100,

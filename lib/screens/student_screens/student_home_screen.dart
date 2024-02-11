@@ -15,17 +15,12 @@ class StudentHomeScreen extends StatefulWidget {
 
 class _StudentHomeScreenState extends State<StudentHomeScreen> {
   String token = "";
-  Future<void> firebaseBackgroundMessage(RemoteMessage message) async {
-    print("Home Screen");
-    print(message.data["title"]);
-    print(message.data["body"]);
-  }
+  Future<void> firebaseBackgroundMessage(RemoteMessage message) async {}
 
   @override
   void initState() {
     FirebaseMessaging.onMessage.listen(firebaseBackgroundMessage);
     FirebaseMessaging.instance.getToken().then((value) {
-      print(value);
       setState(() {
         token = value!;
       });
@@ -94,7 +89,6 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
             );
           }
           if (snapshot.hasError) {
-            print(snapshot.stackTrace);
             return Center(
               child: Text("Error fetching notifications ${snapshot.error}"),
             );
@@ -114,7 +108,6 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                 itemCount: notifications.length,
                 itemBuilder: (_, index) {
                   final notification = notifications[index];
-                  print(notification);
                   return SizedBox(
                     child: ListTile(
                       title: Text(notification.companyName),
