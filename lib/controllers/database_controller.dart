@@ -25,6 +25,8 @@ class DatabaseController {
         "logo": imageurl,
       };
 
+      await db.collection("notifications").add(notification);
+
       var url = Uri.https(dotenv.env["SERVER_URL"]!, "sendNotification");
 
       var body = {
@@ -42,8 +44,6 @@ class DatabaseController {
           "Content-Type": "application/json",
         },
       );
-
-      await db.collection("notifications").add(notification);
     } catch (err) {
       rethrow;
     }
@@ -93,21 +93,21 @@ class DatabaseController {
   }
 
   Future getPaginatedNotifications(int limit) async {
-   try {
-     List<Placement> placements = [];
-    await db
-        .collection("notifications")
-        .limit(limit)
-        .get()
-        .then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
-      for (var doc in querySnapshot.docs) {
-        placements.add(Placement.fromFirestore(doc, null, doc.id));
-      }
-    });
-    return placements;
-   } catch (err) {
+    try {
+      List<Placement> placements = [];
+      await db
+          .collection("notifications")
+          .limit(limit)
+          .get()
+          .then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
+        for (var doc in querySnapshot.docs) {
+          placements.add(Placement.fromFirestore(doc, null, doc.id));
+        }
+      });
+      return placements.reversed.toList();
+    } catch (err) {
       rethrow;
-   }
+    }
   }
 
   Future<List<dynamic>> getAllAdmins() async {

@@ -6,16 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:placement_notifier/configs/push_notifications_config.dart';
 import 'package:placement_notifier/controllers/authentication_controller.dart';
-import 'package:placement_notifier/controllers/database_controller.dart';
 import 'package:placement_notifier/firebase_options.dart';
-import 'package:placement_notifier/screens/admin_screens/admin_home_screen.dart';
 import 'package:placement_notifier/screens/authentication_screens/sign_in_screen.dart';
 import 'package:placement_notifier/screens/student_screens/student_home_screen.dart';
 import 'package:signals/signals_flutter.dart';
 
 Future _firebaseBackgroundMessage(RemoteMessage message) async {}
-
-final admins = signal<List<dynamic>>([]);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,8 +34,6 @@ void main() async {
     }
   });
   await dotenv.load(fileName: ".env");
-  final data = await db.getAllAdmins();
-  admins.value = data;
   runApp(
     const MyApp(),
   );
@@ -69,11 +63,7 @@ class InitialiserScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Watch((context) {
       if (auth.isLoggedIn.value) {
-        if (admins.value.contains(auth.currentlyLoggedInUser.value!.email)) {
-          return const AdminHomeScreen();
-        } else {
-          return const StudentHomeScreen();
-        }
+        return const StudentHomeScreen();
       } else {
         return const SignInScreen();
       }

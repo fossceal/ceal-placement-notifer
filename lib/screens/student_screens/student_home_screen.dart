@@ -4,6 +4,7 @@ import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:placement_notifier/controllers/authentication_controller.dart';
 import 'package:placement_notifier/controllers/database_controller.dart';
 import 'package:placement_notifier/models/placement.dart';
+import 'package:placement_notifier/screens/admin_screens/admin_home_screen.dart';
 import 'package:placement_notifier/screens/student_screens/placement_details_screen.dart';
 
 class StudentHomeScreen extends StatefulWidget {
@@ -73,6 +74,25 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
         title: const Text("PlaceMe By CEAL"),
         actions: [
           IconButton(
+            onPressed: () async {
+              await db.getAllAdmins().then((List<dynamic> admins) {
+                if (admins.contains(auth.currentlyLoggedInUser.value?.email)) {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return const AdminHomeScreen();
+                  }));
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("You are not an admin"),
+                    ),
+                  );
+                }
+              });
+            },
+            icon: const Icon(Icons.admin_panel_settings),
+          ),
+          IconButton(
             onPressed: () {
               logout(context);
             },
@@ -127,7 +147,8 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                           MaterialPageRoute(
                             builder: (context) {
                               return PlacementDetailsScreen(
-                                  placement: notification);
+                                placement: notification,
+                              );
                             },
                           ),
                         );
