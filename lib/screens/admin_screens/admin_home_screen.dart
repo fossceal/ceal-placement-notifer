@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:placement_notifier/controllers/authentication_controller.dart';
 import 'package:placement_notifier/screens/admin_screens/admin_add_placement_screen.dart';
 import 'package:placement_notifier/screens/admin_screens/admin_dashboard_screen.dart';
+import 'package:placement_notifier/screens/authentication_screens/sign_in_screen.dart';
 
 class AdminHomeScreen extends StatelessWidget {
   const AdminHomeScreen({super.key});
@@ -26,7 +27,13 @@ class AdminHomeScreen extends StatelessWidget {
               child: const Text('Continue'),
               onPressed: () async {
                 await auth.signOut().then((value) {
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const SignInScreen();
+                      },
+                    ),
+                  );
                 }).catchError((err) {
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: err));

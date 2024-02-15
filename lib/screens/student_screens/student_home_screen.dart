@@ -5,6 +5,7 @@ import 'package:placement_notifier/controllers/authentication_controller.dart';
 import 'package:placement_notifier/controllers/database_controller.dart';
 import 'package:placement_notifier/models/placement.dart';
 import 'package:placement_notifier/screens/admin_screens/admin_home_screen.dart';
+import 'package:placement_notifier/screens/authentication_screens/sign_in_screen.dart';
 import 'package:placement_notifier/screens/student_screens/placement_details_screen.dart';
 
 class StudentHomeScreen extends StatefulWidget {
@@ -47,7 +48,13 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
               child: const Text('Continue'),
               onPressed: () async {
                 await auth.signOut().then((value) {
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return const SignInScreen();
+                      },
+                    ),
+                  );
                 }).catchError((err) {
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: err));
