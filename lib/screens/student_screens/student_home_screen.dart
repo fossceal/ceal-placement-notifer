@@ -70,7 +70,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Ceal Placement Notifier"),
+        title: const Text("PlaceMe By CEAL"),
         actions: [
           IconButton(
             onPressed: () {
@@ -95,8 +95,14 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
           }
           final notifications = snapshot.data as List<Placement>;
           if (notifications.isEmpty) {
-            return const Center(
-              child: Text("No notifications found"),
+            return LiquidPullToRefresh(
+              onRefresh: () {
+                setState(() {});
+                return Future.value();
+              },
+              child: const Center(
+                child: Text("No notifications found"),
+              ),
             );
           } else {
             return LiquidPullToRefresh(

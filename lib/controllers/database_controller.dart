@@ -50,8 +50,12 @@ class DatabaseController {
   }
 
   Future<void> deleteNotification(String id, String fileurl) async {
-    await storage.deleteLogo(fileurl);
-    await db.collection("notifications").doc(id).delete();
+    try {
+      await storage.deleteLogo(fileurl);
+      await db.collection("notifications").doc(id).delete();
+    } catch (err) {
+      rethrow;
+    }
   }
 
   Future<void> updateNotification({
@@ -62,30 +66,35 @@ class DatabaseController {
     String? link,
     File? imageFile,
   }) async {
-    final docRef = db.collection("notifications").doc(id);
-    final previousNotification = (await docRef.get()).data();
+    try {
+      final docRef = db.collection("notifications").doc(id);
+      final previousNotification = (await docRef.get()).data();
 
-    if (imageFile != null) {
-      await storage.deleteLogo(previousNotification!["logo"]);
+      if (imageFile != null) {
+        await storage.deleteLogo(previousNotification!["logo"]);
+      }
+
+      final logo = imageFile != null
+          ? await storage.uploadLogo(imageFile, uuid.v1())
+          : previousNotification!["logo"];
+
+      final notification = {
+        "company_name": companyName,
+        "job_role": jobRole,
+        "job_description": jobDescription,
+        "link": link,
+        "logo": logo,
+      };
+
+      await db.collection("notifications").doc(id).update(notification);
+    } catch (err) {
+      rethrow;
     }
-
-    final logo = imageFile != null
-        ? await storage.uploadLogo(imageFile, uuid.v1())
-        : previousNotification!["logo"];
-
-    final notification = {
-      "company_name": companyName,
-      "job_role": jobRole,
-      "job_description": jobDescription,
-      "link": link,
-      "logo": logo,
-    };
-
-    await db.collection("notifications").doc(id).update(notification);
   }
 
   Future getPaginatedNotifications(int limit) async {
-    List<Placement> placements = [];
+   try {
+     List<Placement> placements = [];
     await db
         .collection("notifications")
         .limit(limit)
@@ -96,6 +105,9 @@ class DatabaseController {
       }
     });
     return placements;
+   } catch (err) {
+      rethrow;
+   }
   }
 
   Future<List<dynamic>> getAllAdmins() async {

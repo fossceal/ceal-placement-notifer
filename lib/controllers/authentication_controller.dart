@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:placement_notifier/configs/push_notifications_config.dart';
 import 'package:signals/signals.dart';
 
 class AuthenticationController {
@@ -21,7 +22,8 @@ class AuthenticationController {
   Future<void> handleGoogleSignin() async {
     try {
       GoogleAuthProvider googleAuthProvider = GoogleAuthProvider();
-      _auth.signInWithProvider(googleAuthProvider);
+      await _auth.signInWithProvider(googleAuthProvider);
+      await PushNotifications.firebaseMessaging.subscribeToTopic("placement");
     } catch (err) {
       rethrow;
     }
@@ -29,6 +31,7 @@ class AuthenticationController {
 
   Future<void> signOut() async {
     await _auth.signOut();
+    PushNotifications.firebaseMessaging.unsubscribeFromTopic("placement");
   }
 }
 

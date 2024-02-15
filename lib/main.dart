@@ -48,13 +48,12 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Placement Notifier',
+      title: 'PlaceMe By CEAL',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         brightness: Brightness.light,
         useMaterial3: true,
       ),
@@ -63,18 +62,8 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class InitialiserScreen extends StatefulWidget {
+class InitialiserScreen extends StatelessWidget {
   const InitialiserScreen({super.key});
-
-  @override
-  State<InitialiserScreen> createState() => _InitialiserScreenState();
-}
-
-class _InitialiserScreenState extends State<InitialiserScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

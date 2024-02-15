@@ -164,7 +164,7 @@ class _AdminAddPlacementScreenState extends State<AdminAddPlacementScreen> {
                         pickedImage,
                       )
                           .then(
-                        (_) async {
+                        (_) {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(
                             content: Text("Notification sent successfully"),

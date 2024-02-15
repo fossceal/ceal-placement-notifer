@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:placement_notifier/controllers/authentication_controller.dart';
 
 class SignInScreen extends StatelessWidget {
@@ -8,19 +9,16 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ceal Placement Notifier'),
+        title: const Text('PlaceMe By CEAL'),
       ),
       body: SizedBox(
         width: double.infinity,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
-              "Sign in With Institution Mail",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
+            Lottie.asset("assets/animations/animation2.json"),
             const SizedBox(
-              height: 30,
+              height: 70,
             ),
             ElevatedButton(
               onPressed: () {
@@ -64,6 +62,13 @@ class SignInScreen extends StatelessWidget {
                   ],
                 ),
               ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Text(
+              "(Sign in with Institution Mail)",
+              // style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ],
         ),

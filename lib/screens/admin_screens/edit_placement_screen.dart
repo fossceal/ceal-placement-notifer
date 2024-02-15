@@ -110,8 +110,16 @@ class _EditPlacementScreenState extends State<EditPlacementScreen> {
                                 isLogoPicked = false;
                               });
                             },
-                            icon: const Icon(Icons.delete),
-                            label: const Text("Delete"),
+                            icon: const Icon(
+                              Icons.delete,
+                              color: Color.fromARGB(255, 177, 52, 43),
+                            ),
+                            label: const Text(
+                              "Delete",
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 177, 52, 43),
+                              ),
+                            ),
                           )
                         : ElevatedButton(
                             onPressed: () async {

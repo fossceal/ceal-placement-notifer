@@ -50,7 +50,7 @@ class AdminHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Placement Notifier Admin Panel"),
+        title: const Text("PlaceMe Admin Panel"),
         actions: [
           IconButton(
             onPressed: () {

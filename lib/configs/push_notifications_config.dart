@@ -2,12 +2,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class PushNotifications {
-  static final _firebaseMessaging = FirebaseMessaging.instance;
+  static final firebaseMessaging = FirebaseMessaging.instance;
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   static Future init() async {
-    await _firebaseMessaging.requestPermission(
+    await firebaseMessaging.requestPermission(
       alert: true,
       badge: true,
       announcement: true,
@@ -16,8 +16,7 @@ class PushNotifications {
       provisional: false,
       sound: true,
     );
-    await _firebaseMessaging.getToken();
-    await _firebaseMessaging.subscribeToTopic("placement");
+    await firebaseMessaging.getToken();
   }
 
   static Future localNotiInit() async {

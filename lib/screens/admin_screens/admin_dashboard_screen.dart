@@ -29,8 +29,27 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         }
         final notifications = snapshot.data as List<Placement>;
         if (notifications.isEmpty) {
-          return const Center(
-            child: Text("No notifications found"),
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 60,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {});
+                    },
+                    child: const Icon(
+                      Icons.refresh,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                const Text("No notifications found"),
+              ],
+            ),
           );
         } else {
           return LiquidPullToRefresh(
@@ -46,11 +65,24 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   title: Text(notification.companyName),
                   subtitle: Text(notification.jobRole),
                   trailing: IconButton(
-                    icon: const Icon(Icons.delete),
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Color.fromARGB(255, 165, 51, 43),
+                    ),
                     onPressed: () async {
-                      await db.deleteNotification(
-                          notifications[index].id, notification.imageUrl);
-                      setState(() {});
+                      await db
+                          .deleteNotification(
+                              notifications[index].id, notification.imageUrl)
+                          .then((value) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              "Notification deleted",
+                            ),
+                          ),
+                        );
+                        setState(() {});
+                      });
                     },
                   ),
                   leading: CircleAvatar(
