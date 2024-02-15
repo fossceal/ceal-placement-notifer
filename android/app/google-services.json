@@ -7,20 +7,12 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:723862345529:android:68e160779a56b1db163ae8",
+        "mobilesdk_app_id": "1:723862345529:android:b1a3cde9fa9a2aea163ae8",
         "android_client_info": {
-          "package_name": "com.example.placement_notifier"
+          "package_name": "com.ats527.placeme"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "723862345529-r4hl06rkm0ssps3ggbuirc8nkqjndd0u.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.placement_notifier",
-            "certificate_hash": "90d781c368aff592ff175b720821c686c9968326"
-          }
-        },
         {
           "client_id": "723862345529-3ak7p7ribgf53sj7blo7ge4is3s1oi8m.apps.googleusercontent.com",
           "client_type": 3
