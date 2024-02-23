@@ -11,111 +11,99 @@ class PlacementDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Placement Details"),
+        title: const Text(
+          "Placement Details",
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+          ),
+        ),
       ),
-      //show all the details in a beautiful way
-      body: SizedBox(
-        width: double.infinity,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //show all the details in a beautiful way
-                // show circular logo
-                const SizedBox(
-                  height: 20,
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 22),
+        child: Center(
+          child: SizedBox(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height * 0.8,
+            child: Card(
+              shape: RoundedRectangleBorder(
+                side: const BorderSide(
+                  color: Colors.black,
+                  width: 1.0,
                 ),
-                CircleAvatar(
-                  backgroundColor: Colors.black87,
-                  radius: 90,
-                  child: CircleAvatar(
-                    radius: 80,
-                    backgroundImage: NetworkImage(placement.imageUrl),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              elevation: 5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    //border
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                        width: 4,
+                      ),
+                    ),
+                    child: Image(
+                      image: NetworkImage(placement.imageUrl),
+                      height: 180,
+                      width: 180,
+                      //border
+                      fit: BoxFit.cover,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 60,
-                ),
-                Row(
-                  children: [
-                    const CircleAvatar(
-                      radius: 25,
-                      child: Icon(Icons.apartment),
+                  const SizedBox(height: 30),
+                  Text(
+                    placement.companyName,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w900,
                     ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      placement.companyName,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  children: [
-                    const CircleAvatar(
-                      radius: 25,
-                      child: Icon(
-                        Icons.work,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      placement.jobRole,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  children: [
-                    const CircleAvatar(
-                      radius: 25,
-                      child: Icon(
-                        Icons.info,
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      placement.jobDescription,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 70,
-                ),
-                SizedBox(
-                  height: 60,
-                  width: 200,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      _launchUrl(Uri.parse(placement.applyLink));
-                    },
-                    child: const Text("Apply Now"),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 10),
+                  Text(
+                    placement.jobRole,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    placement.jobDescription,
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 60),
+                  SizedBox(
+                    height: 60,
+                    width: 160,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.yellow[50]),
+                      ),
+                      onPressed: () async {
+                        await _launchUrl(
+                          Uri.parse(
+                            placement.applyLink,
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        "Apply Now",
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ),
             ),
           ),
         ),

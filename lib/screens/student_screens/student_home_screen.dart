@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:placement_notifier/controllers/authentication_controller.dart';
 import 'package:placement_notifier/controllers/database_controller.dart';
+import 'package:placement_notifier/main.dart';
 import 'package:placement_notifier/models/placement.dart';
 import 'package:placement_notifier/screens/admin_screens/admin_home_screen.dart';
 import 'package:placement_notifier/screens/authentication_screens/sign_in_screen.dart';
@@ -48,17 +49,18 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
               child: const Text('Continue'),
               onPressed: () async {
                 await auth.signOut().then((value) {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return const SignInScreen();
-                      },
-                    ),
-                  );
+                  Navigator.pushAndRemoveUntil(context,
+                      MaterialPageRoute(builder: (context) {
+                    return const InitialiserScreen();
+                  }), (route) => false);
                 }).catchError((err) {
                   ScaffoldMessenger.of(context)
                       .showSnackBar(SnackBar(content: err));
-                  Navigator.of(context).pop();
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) {
+                      return const SignInScreen();
+                    }),
+                  );
                 });
               },
             ),
@@ -78,7 +80,10 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("PlaceMe By CEAL"),
+        title: const Text(
+          "PlaceMe By CEAL",
+          style: TextStyle(fontWeight: FontWeight.w900),
+        ),
         actions: [
           IconButton(
             onPressed: () async {
@@ -142,24 +147,45 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                 itemBuilder: (_, index) {
                   final notification = notifications[index];
                   return SizedBox(
-                    child: ListTile(
-                      title: Text(notification.companyName),
-                      subtitle: Text(notification.jobRole),
-                      leading: CircleAvatar(
-                        radius: 30,
-                        backgroundImage: NetworkImage(notification.imageUrl),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return PlacementDetailsScreen(
-                                placement: notification,
-                              );
-                            },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
+                      child: Card(
+                        shape: const RoundedRectangleBorder(
+                          side: BorderSide(
+                            color: Colors.black,
+                            width: 1.0,
                           ),
-                        );
-                      },
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                        borderOnForeground: true,
+                        color: Colors.orange[50],
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                              notification.imageUrl,
+                            ),
+                            backgroundColor: Colors.red,
+                            radius: 30,
+                          ),
+                          title: Text(
+                            notification.companyName,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Text(notification.jobRole),
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) {
+                                return PlacementDetailsScreen(
+                                  placement: notification,
+                                );
+                              },
+                            ));
+                          },
+                        ),
+                      ),
                     ),
                   );
                 },

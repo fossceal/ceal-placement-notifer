@@ -9,7 +9,10 @@ class SignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('PlaceMe By CEAL'),
+        title: const Text(
+          'PlaceMe By CEAL',
+          style: TextStyle(fontWeight: FontWeight.w900),
+        ),
       ),
       body: SizedBox(
         width: double.infinity,
@@ -22,13 +25,7 @@ class SignInScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                auth.handleGoogleSignin().then((_) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Successfully Logged in"),
-                    ),
-                  );
-                }).catchError((err) {
+                auth.handleGoogleSignin().catchError((err) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text("Error: $err"),
@@ -55,7 +52,7 @@ class SignInScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 20,
                           color: Colors.black54,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w900,
                         ),
                       ),
                     ),
