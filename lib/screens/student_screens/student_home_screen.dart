@@ -127,13 +127,28 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
           }
           final notifications = snapshot.data as List<Placement>;
           if (notifications.isEmpty) {
-            return LiquidPullToRefresh(
-              onRefresh: () {
-                setState(() {});
-                return Future.value();
-              },
-              child: const Center(
-                child: Text("No notifications found"),
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 60,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {});
+                      },
+                      child: const Icon(
+                        Icons.refresh,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  const Text(
+                    "No notifications found",
+                  ),
+                ],
               ),
             );
           } else {
