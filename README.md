@@ -2,7 +2,7 @@
 
 <img src=https://github.com/ATS527/ceal-placement-notifer/blob/main/logo/Placeme_final%403x.png alt="logo" width=97 height=97 />
 
-<h1>Placeme By CEAL</h1>
+<h1>PlaceMe By CEAL</h1>
 <p>High Priority Placement Notifications</p>
 
 <a href='https://play.google.com/store/apps/details?id=com.ats527.placeme'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' height="80"/></a>
