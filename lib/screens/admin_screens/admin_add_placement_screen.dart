@@ -22,7 +22,8 @@ class _AdminAddPlacementScreenState extends State<AdminAddPlacementScreen> {
   late TextEditingController _applyLinkController;
 
   bool isLogoPicked = false;
-  late File pickedImage;
+  late File? pickedImage;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -78,7 +79,7 @@ class _AdminAddPlacementScreenState extends State<AdminAddPlacementScreen> {
                         ? SizedBox(
                             height: 100,
                             width: 100,
-                            child: Image.file(pickedImage))
+                            child: Image.file(pickedImage!))
                         : const Text("Pick Logo of the Company"),
                     const SizedBox(
                       width: 20,
@@ -88,6 +89,7 @@ class _AdminAddPlacementScreenState extends State<AdminAddPlacementScreen> {
                             onPressed: () {
                               setState(() {
                                 isLogoPicked = false;
+                                pickedImage = null;
                               });
                             },
                             icon: const Icon(Icons.delete),
@@ -150,35 +152,51 @@ class _AdminAddPlacementScreenState extends State<AdminAddPlacementScreen> {
                 //submit button
                 SizedBox(
                   height: 55,
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      await db
-                          .addNotification(
-                        Placement(
-                            id: "",
-                            companyName: _companyNameController.text,
-                            jobRole: _jobRoleController.text,
-                            jobDescription: _jobDescriptionController.text,
-                            applyLink: _applyLinkController.text,
-                            imageUrl: ""),
-                        pickedImage,
-                      )
-                          .then(
-                        (_) {
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                            content: Text("Notification sent successfully"),
-                          ));
-                        },
-                      ).catchError((err) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text("Error: $err"),
-                        ));
-                      });
-                    },
-                    icon: const Icon(Icons.send),
-                    label: const Text("Send Push Notification"),
-                  ),
+                  child: isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ElevatedButton.icon(
+                          onPressed: () async {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            await db
+                                .addNotification(
+                              Placement(
+                                  id: "",
+                                  companyName: _companyNameController.text,
+                                  jobRole: _jobRoleController.text,
+                                  jobDescription:
+                                      _jobDescriptionController.text,
+                                  applyLink: _applyLinkController.text,
+                                  imageUrl: ""),
+                              pickedImage!,
+                            )
+                                .then(
+                              (_) {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  content:
+                                      Text("Notification sent successfully"),
+                                ));
+                              },
+                            ).catchError((err) {
+                              setState(() {
+                                isLoading = false;
+                              });
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text("Error: $err"),
+                              ));
+                            });
+                          },
+                          icon: const Icon(Icons.send),
+                          label: const Text("Send Push Notification"),
+                        ),
                 ),
               ],
             ),

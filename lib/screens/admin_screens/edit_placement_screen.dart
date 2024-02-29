@@ -34,6 +34,8 @@ class _EditPlacementScreenState extends State<EditPlacementScreen> {
   late bool isLogoPicked = widget.logo != null;
   late String logoUrl = widget.logo ?? "";
   File? logoFile;
+  bool isLoading1 = false;
+  bool isLoading2 = false;
 
   @override
   void initState() {
@@ -46,7 +48,8 @@ class _EditPlacementScreenState extends State<EditPlacementScreen> {
     _jobDescriptionController.value =
         TextEditingValue(text: widget.jobDescription);
     _applyLinkController.value = TextEditingValue(text: widget.applyLink);
-    logoUrl = widget.logo!;
+    logoUrl = widget.logo ??
+        "https://raw.githubusercontent.com/fossceal/ceal-placement-notifer/main/logo/Placeme_final%403x.png";
     super.initState();
   }
 
@@ -109,6 +112,7 @@ class _EditPlacementScreenState extends State<EditPlacementScreen> {
                               setState(() {
                                 isLogoPicked = false;
                               });
+                              logoFile = null;
                             },
                             icon: const Icon(
                               Icons.delete,
@@ -179,28 +183,47 @@ class _EditPlacementScreenState extends State<EditPlacementScreen> {
                 //submit button
                 SizedBox(
                   height: 55,
-                  child: ElevatedButton.icon(
-                    onPressed: () async {
-                      db
-                          .updateNotification(
-                        id: widget.id,
-                        companyName: _companyNameController.text,
-                        jobRole: _jobRoleController.text,
-                        jobDescription: _jobDescriptionController.text,
-                        link: _applyLinkController.text,
-                        imageFile: logoFile,
-                      )
-                          .then((_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Notification edited successfully"),
-                          ),
-                        );
-                      });
-                    },
-                    icon: const Icon(Icons.send),
-                    label: const Text("Edit Placement Notification"),
-                  ),
+                  child: isLoading1
+                      ? const Center(child: CircularProgressIndicator())
+                      : ElevatedButton.icon(
+                          onPressed: () async {
+                            setState(() {
+                              isLoading1 = true;
+                            });
+                            db
+                                .updateNotification(
+                              id: widget.id,
+                              companyName: _companyNameController.text,
+                              jobRole: _jobRoleController.text,
+                              jobDescription: _jobDescriptionController.text,
+                              link: _applyLinkController.text,
+                              imageFile: logoFile,
+                            )
+                                .then((_) {
+                              setState(() {
+                                isLoading1 = false;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content:
+                                      Text("Notification edited successfully"),
+                                ),
+                              );
+                            }).catchError((err) {
+                              setState(() {
+                                isLoading1 = false;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text("Error editing notification $err"),
+                                ),
+                              );
+                            });
+                          },
+                          icon: const Icon(Icons.send),
+                          label: const Text("Edit Placement Notification"),
+                        ),
                 ),
                 const SizedBox(
                   height: 30,
@@ -208,35 +231,53 @@ class _EditPlacementScreenState extends State<EditPlacementScreen> {
                 //submit button
                 SizedBox(
                   height: 55,
-                  child: ElevatedButton.icon(
-                    style: ButtonStyle(
-                      iconColor: MaterialStateProperty.all(
-                        const Color.fromARGB(
-                          255,
-                          177,
-                          52,
-                          43,
-                        ),
-                      ),
-                    ),
-                    onPressed: () async {
-                      db
-                          .deleteNotification(widget.id, widget.logo ?? "")
-                          .then((_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Notification deleted successfully"),
+                  child: isLoading2
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : ElevatedButton.icon(
+                          style: ButtonStyle(
+                            iconColor: MaterialStateProperty.all(
+                              const Color.fromARGB(255, 177, 52, 43),
+                            ),
                           ),
-                        );
-                        Navigator.of(context).pop();
-                      });
-                    },
-                    icon: const Icon(Icons.delete),
-                    label: const Text(
-                      "Delete Placement Notification",
-                      style: TextStyle(color: Color.fromARGB(255, 177, 52, 43)),
-                    ),
-                  ),
+                          onPressed: () async {
+                            setState(() {
+                              isLoading2 = true;
+                            });
+                            db
+                                .deleteNotification(widget.id, widget.logo)
+                                .then((_) {
+                              setState(() {
+                                isLoading2 = false;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content:
+                                      Text("Notification deleted successfully"),
+                                ),
+                              );
+                              Navigator.of(context).pop();
+                            }).catchError((err) {
+                              setState(() {
+                                isLoading2 = false;
+                              });
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content:
+                                      Text("Error deleting notification $err"),
+                                ),
+                              );
+                            });
+                          },
+                          icon: const Icon(Icons.delete),
+                          label: const Text(
+                            "Delete Placement Notification",
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 177, 52, 43),
+                            ),
+                          ),
+                        ),
                 ),
               ],
             ),

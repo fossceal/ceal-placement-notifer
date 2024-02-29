@@ -6,7 +6,7 @@ class Placement {
   final String jobRole;
   final String jobDescription;
   final String applyLink;
-  final String imageUrl;
+  String? imageUrl;
 
   Placement({
     required this.id,

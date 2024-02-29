@@ -9,13 +9,18 @@ import 'package:placement_notifier/models/placement.dart';
 import 'package:uuid/uuid.dart';
 
 class DatabaseController {
-  final db = FirebaseFirestore.instance;
+  final database = FirebaseFirestore.instance;
 
   var uuid = const Uuid();
 
-  Future addNotification(Placement placement, File imageFile) async {
+  Future addNotification(Placement placement, File? imageFile) async {
     try {
-      final imageurl = await storage.uploadLogo(imageFile, uuid.v1());
+      final String? imageurl;
+      if (imageFile != null) {
+        imageurl = await storage.uploadLogo(imageFile, uuid.v1());
+      } else {
+        imageurl = null;
+      }
 
       final notification = {
         "company_name": placement.companyName,
@@ -23,36 +28,40 @@ class DatabaseController {
         "job_description": placement.jobDescription,
         "link": placement.applyLink,
         "logo": imageurl,
+        "timestamp": DateTime.now().toIso8601String(),
       };
 
-      await db.collection("notifications").add(notification);
+      await database.collection("notifications").add(notification);
 
-      var url = Uri.https(dotenv.env["SERVER_URL"]!, "sendNotification");
+      // var url = Uri.https(dotenv.env["SERVER_URL"]!, "sendNotification");
 
-      var body = {
-        'company_name': placement.companyName,
-        'job_role': placement.jobRole,
-        'job_description': placement.jobDescription,
-        'apply_link': placement.applyLink,
-        'company_logo': imageurl,
-      };
+      // var body = {
+      //   'company_name': placement.companyName,
+      //   'job_role': placement.jobRole,
+      //   'job_description': placement.jobDescription,
+      //   'apply_link': placement.applyLink,
+      //   'company_logo': imageurl,
+      // };
 
-      await http.post(
-        url,
-        body: json.encode(body),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      );
+      // await http.post(
+      //   url,
+      //   body: json.encode(body),
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      // );
     } catch (err) {
       rethrow;
     }
   }
 
-  Future<void> deleteNotification(String id, String fileurl) async {
+  Future<void> deleteNotification(String id, String? fileurl) async {
     try {
-      await storage.deleteLogo(fileurl);
-      await db.collection("notifications").doc(id).delete();
+    
+      if (fileurl != null) {
+        await storage.deleteLogo(fileurl);
+      }
+      await database.collection("notifications").doc(id).delete();
     } catch (err) {
       rethrow;
     }
@@ -67,7 +76,7 @@ class DatabaseController {
     File? imageFile,
   }) async {
     try {
-      final docRef = db.collection("notifications").doc(id);
+      final docRef = database.collection("notifications").doc(id);
       final previousNotification = (await docRef.get()).data();
 
       if (imageFile != null) {
@@ -86,7 +95,7 @@ class DatabaseController {
         "logo": logo,
       };
 
-      await db.collection("notifications").doc(id).update(notification);
+      await database.collection("notifications").doc(id).update(notification);
     } catch (err) {
       rethrow;
     }
@@ -95,7 +104,7 @@ class DatabaseController {
   Future getPaginatedNotifications(int limit) async {
     try {
       List<Placement> placements = [];
-      await db
+      await database
           .collection("notifications")
           .limit(limit)
           .get()

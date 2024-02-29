@@ -15,7 +15,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: db.getPaginatedNotifications(10),
+      future: db.getPaginatedNotifications(50),
       builder: (_, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -61,6 +61,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               itemCount: notifications.length,
               itemBuilder: (_, index) {
                 final notification = notifications[index];
+                if (notification.imageUrl == "") {
+                  notification.imageUrl = null;
+                }
                 return ListTile(
                   title: Text(notification.companyName),
                   subtitle: Text(notification.jobRole),
@@ -86,9 +89,18 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     },
                   ),
                   leading: CircleAvatar(
-                    radius: 30,
-                    backgroundImage: NetworkImage(notification.imageUrl),
-                  ),
+                      radius: 30,
+                      backgroundImage: NetworkImage(notification.imageUrl ??
+                          "https://raw.githubusercontent.com/fossceal/ceal-placement-notifer/main/logo/Placeme_final%403x.png"),
+                      onBackgroundImageError: (exception, stackTrace) => {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  "Error loading image",
+                                ),
+                              ),
+                            ),
+                          }),
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(

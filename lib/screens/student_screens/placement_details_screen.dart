@@ -45,7 +45,7 @@ class PlacementDetailsScreen extends StatelessWidget {
                       ),
                     ),
                     child: Image(
-                      image: NetworkImage(placement.imageUrl),
+                      image: NetworkImage(placement.imageUrl!),
                       height: 180,
                       width: 180,
                       //border

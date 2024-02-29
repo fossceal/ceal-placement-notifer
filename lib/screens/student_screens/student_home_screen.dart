@@ -7,7 +7,7 @@ import 'package:placement_notifier/main.dart';
 import 'package:placement_notifier/models/placement.dart';
 import 'package:placement_notifier/screens/admin_screens/admin_home_screen.dart';
 import 'package:placement_notifier/screens/authentication_screens/sign_in_screen.dart';
-import 'package:placement_notifier/screens/student_screens/placement_details_screen.dart';
+import 'package:placement_notifier/widgets/placement_list_tile.dart';
 
 class StudentHomeScreen extends StatefulWidget {
   const StudentHomeScreen({super.key});
@@ -113,7 +113,7 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
         ],
       ),
       body: FutureBuilder(
-        future: db.getPaginatedNotifications(10),
+        future: db.getPaginatedNotifications(50),
         builder: (_, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -161,47 +161,8 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                 itemCount: notifications.length,
                 itemBuilder: (_, index) {
                   final notification = notifications[index];
-                  return SizedBox(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
-                      child: Card(
-                        shape: const RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: Colors.black,
-                            width: 1.0,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                        borderOnForeground: true,
-                        color: Colors.orange[50],
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                              notification.imageUrl,
-                            ),
-                            backgroundColor: Colors.red,
-                            radius: 30,
-                          ),
-                          title: Text(
-                            notification.companyName,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(notification.jobRole),
-                          onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) {
-                                return PlacementDetailsScreen(
-                                  placement: notification,
-                                );
-                              },
-                            ));
-                          },
-                        ),
-                      ),
-                    ),
+                  return PlacementListTile(
+                    notification: notification,
                   );
                 },
               ),
