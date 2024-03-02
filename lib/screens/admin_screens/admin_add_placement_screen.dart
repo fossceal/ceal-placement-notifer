@@ -170,6 +170,8 @@ class _AdminAddPlacementScreenState extends State<AdminAddPlacementScreen> {
                                   jobDescription:
                                       _jobDescriptionController.text,
                                   applyLink: _applyLinkController.text,
+                                  reportCount: 0,
+                                  timestamp: DateTime.now(),
                                   imageUrl: ""),
                               pickedImage!,
                             )

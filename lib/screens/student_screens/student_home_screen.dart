@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_ui_firestore/firebase_ui_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:placement_notifier/controllers/authentication_controller.dart';
@@ -20,6 +21,8 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
   String token = "";
   Future<void> firebaseBackgroundMessage(RemoteMessage message) async {}
 
+  late ScrollController _scrollController;
+
   @override
   void initState() {
     FirebaseMessaging.onMessage.listen(firebaseBackgroundMessage);
@@ -28,7 +31,14 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
         token = value!;
       });
     });
+    _scrollController = ScrollController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   void logout(BuildContext context) {
@@ -46,6 +56,12 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
           ),
           actions: [
             TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
               child: const Text('Continue'),
               onPressed: () async {
                 await auth.signOut().then((value) {
@@ -62,12 +78,6 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                     }),
                   );
                 });
-              },
-            ),
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
               },
             ),
           ],
@@ -112,21 +122,17 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
           ),
         ],
       ),
-      body: FutureBuilder(
-        future: db.getPaginatedNotifications(50),
-        builder: (_, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (snapshot.hasError) {
-            return Center(
-              child: Text("Error fetching notifications ${snapshot.error}"),
-            );
-          }
-          final notifications = snapshot.data as List<Placement>;
-          if (notifications.isEmpty) {
+      body: LiquidPullToRefresh(
+        springAnimationDurationInMilliseconds: 300,
+        onRefresh: () {
+          setState(() {});
+          return Future.value();
+        },
+        // child: SizedBox(),
+        child: FirestoreListView<Placement>(
+          query: db.getNotifications(),
+          pageSize: 10,
+          emptyBuilder: (context) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -151,24 +157,18 @@ class _StudentHomeScreenState extends State<StudentHomeScreen> {
                 ],
               ),
             );
-          } else {
-            return LiquidPullToRefresh(
-              onRefresh: () {
-                setState(() {});
-                return Future.value();
-              },
-              child: ListView.builder(
-                itemCount: notifications.length,
-                itemBuilder: (_, index) {
-                  final notification = notifications[index];
-                  return PlacementListTile(
-                    notification: notification,
-                  );
-                },
-              ),
+          },
+          errorBuilder: (context, error, stackTrace) {
+            return Center(
+              child: Text("Error fetching notifications $error"),
             );
-          }
-        },
+          },
+          itemBuilder: (context, doc) {
+            return PlacementListTile(
+              notification: doc.data(),
+            );
+          },
+        ),
       ),
     );
   }

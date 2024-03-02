@@ -193,30 +193,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.4"
-  firebase_database:
-    dependency: transitive
-    description:
-      name: firebase_database
-      sha256: d8f58548ab06b0b4dc79bb01e6018e31436c0f44c54c6ad821eec6f6b90d19cb
-      url: "https://pub.dev"
-    source: hosted
-    version: "10.4.6"
-  firebase_database_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_database_platform_interface
-      sha256: "783fa084f57a231366121ad9b66ae6efd643b10f50ac6a53200eeeeeb88a2879"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.5+22"
-  firebase_database_web:
-    dependency: transitive
-    description:
-      name: firebase_database_web
-      sha256: c3308b70ab02d58a7f4fdc6dfe2b25ccee374758fa7d2c0e509e88ba2a846332
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.3+22"
   firebase_messaging:
     dependency: "direct main"
     description:
@@ -241,14 +217,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.6.5"
-  firebase_pagination:
-    dependency: "direct main"
-    description:
-      name: firebase_pagination
-      sha256: "46fad486feb9656d2b5198a30384d787efd602cef20d2fb33d9fb405f3e641de"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.0"
   firebase_storage:
     dependency: "direct main"
     description:
@@ -273,6 +241,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.7.0"
+  firebase_ui_firestore:
+    dependency: "direct main"
+    description:
+      name: firebase_ui_firestore
+      sha256: "49ef3e157828161cde9aaf1441a7098b6f5d7d360eafe5a588e6350f7f32caf9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.6.2"
+  firebase_ui_localizations:
+    dependency: transitive
+    description:
+      name: firebase_ui_localizations
+      sha256: "816501d26bb9e2a58b5d5f80351d82a50bd2f5c8d4aeb22504c53f91b6c57259"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.10.2"
+  firebase_ui_shared:
+    dependency: transitive
+    description:
+      name: firebase_ui_shared
+      sha256: f1d07c130a39104d32fba1dab274b7bcb13be2bf4e652624a4ccabb58f9781f1
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.1"
   fixnum:
     dependency: transitive
     description:
@@ -326,6 +318,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0+1"
+  flutter_localizations:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -360,6 +357,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.18.1"
   js:
     dependency: transitive
     description:

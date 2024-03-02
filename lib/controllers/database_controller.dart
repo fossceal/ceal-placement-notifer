@@ -29,6 +29,7 @@ class DatabaseController {
         "link": placement.applyLink,
         "logo": imageurl,
         "timestamp": DateTime.now().toIso8601String(),
+        "report_count": 0,
       };
 
       await database.collection("notifications").add(notification);
@@ -57,11 +58,23 @@ class DatabaseController {
 
   Future<void> deleteNotification(String id, String? fileurl) async {
     try {
-    
       if (fileurl != null) {
         await storage.deleteLogo(fileurl);
       }
       await database.collection("notifications").doc(id).delete();
+    } catch (err) {
+      rethrow;
+    }
+  }
+
+  Future reportNotification(String id) async {
+    try {
+      final docRef = database.collection("notifications").doc(id);
+
+      await docRef.update({
+        "report_count": FieldValue.increment(1),
+      });
+
     } catch (err) {
       rethrow;
     }
@@ -101,19 +114,17 @@ class DatabaseController {
     }
   }
 
-  Future getPaginatedNotifications(int limit) async {
+  Query<Placement> getNotifications() {
     try {
-      List<Placement> placements = [];
-      await database
+      final notifications = database
           .collection("notifications")
-          .limit(limit)
-          .get()
-          .then((QuerySnapshot<Map<String, dynamic>> querySnapshot) {
-        for (var doc in querySnapshot.docs) {
-          placements.add(Placement.fromFirestore(doc, null, doc.id));
-        }
-      });
-      return placements.reversed.toList();
+          .orderBy("timestamp", descending: true)
+          .withConverter(
+            fromFirestore: (snapshot, _) =>
+                Placement.fromFirestore(snapshot.data()!, snapshot.id),
+            toFirestore: (placement, _) => placement.toFirestore(),
+          );
+      return notifications;
     } catch (err) {
       rethrow;
     }
