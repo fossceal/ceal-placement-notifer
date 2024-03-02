@@ -34,23 +34,23 @@ class DatabaseController {
 
       await database.collection("notifications").add(notification);
 
-      // var url = Uri.https(dotenv.env["SERVER_URL"]!, "sendNotification");
+      var url = Uri.https(dotenv.env["SERVER_URL"]!, "sendNotification");
 
-      // var body = {
-      //   'company_name': placement.companyName,
-      //   'job_role': placement.jobRole,
-      //   'job_description': placement.jobDescription,
-      //   'apply_link': placement.applyLink,
-      //   'company_logo': imageurl,
-      // };
+      var body = {
+        'company_name': placement.companyName,
+        'job_role': placement.jobRole,
+        'job_description': placement.jobDescription,
+        'apply_link': placement.applyLink,
+        'company_logo': imageurl,
+      };
 
-      // await http.post(
-      //   url,
-      //   body: json.encode(body),
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      // );
+      await http.post(
+        url,
+        body: json.encode(body),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      );
     } catch (err) {
       rethrow;
     }
@@ -74,7 +74,6 @@ class DatabaseController {
       await docRef.update({
         "report_count": FieldValue.increment(1),
       });
-
     } catch (err) {
       rethrow;
     }
