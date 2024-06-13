@@ -1,4 +1,3 @@
-
 class Placement {
   final String id;
   final String companyName;
@@ -29,10 +28,9 @@ class Placement {
       jobDescription: data['job_description'] ?? '',
       applyLink: data['link'] ?? '',
       imageUrl: data['logo'] ?? '',
-      timestamp: DateTime.parse(data['timestamp'],
-      
+      timestamp: DateTime.parse(
+        data['timestamp'],
       ),
-
     );
   }
 

@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "723862345529-ohojcqk07n3bbj5up55p74n5fp0vq223.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ats527.placeme",
+            "certificate_hash": "90d781c368aff592ff175b720821c686c9968326"
+          }
+        },
+        {
+          "client_id": "723862345529-vaubpnu2ae6s20ls6im88hef11rko98m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ats527.placeme",
+            "certificate_hash": "b1edaf504b104c2e6ea60184d83a823d7353fd31"
+          }
+        },
+        {
           "client_id": "723862345529-3ak7p7ribgf53sj7blo7ge4is3s1oi8m.apps.googleusercontent.com",
           "client_type": 3
         }

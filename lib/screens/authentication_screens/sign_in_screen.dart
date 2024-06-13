@@ -26,6 +26,7 @@ class SignInScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 auth.handleGoogleSignin().catchError((err) {
+                  print("ran here");
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text("Error: $err"),
